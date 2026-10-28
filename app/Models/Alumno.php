@@ -22,7 +22,8 @@ class Alumno extends Model
         'nacceso',
     ];
 
-    public function matriculas(): HasMany {
+    public function matriculas(): HasMany
+    {
         return $this->hasMany(Matricula::class);
     }
 }

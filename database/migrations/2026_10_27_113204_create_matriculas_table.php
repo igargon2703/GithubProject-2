@@ -10,21 +10,17 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('matriculas', function (Blueprint $table) {
+        Schema::create('matricula', function (Blueprint $table) {
             $table->id();
-
-            // 1º Definición de las columnas de clave foránea
-            $table->foreignId('alumno_id')->constrained('alumno');
-            $table->foreignId('modulo_id')->constrained('modulo')->onDelete('restrict');
-
-            // 2º Nota decimal y curso
+            $table->foreignId('alumno_id');
+            $table->foreignId('modulo_id');
             $table->decimal('nota', 4, 2)->nullable();
-            $table->unsignedBigInteger('curso');
-
+            $table->unsignedSmallInteger('curso');
             $table->timestamps();
-
-            // 3º Clave única compuesta por alumno, módulo y curso
             $table->unique(['alumno_id', 'modulo_id', 'curso']);
+            $table->foreign('alumno_id')->references('id')->on('alumno')->onDelete('cascade');
+            $table->foreign('modulo_id')->references('id')->on('modulo')->onDelete('restrict');
+
         });
     }
 
@@ -33,6 +29,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('matriculas');
+        Schema::dropIfExists('matricula');
     }
 };

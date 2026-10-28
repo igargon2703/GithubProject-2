@@ -3,10 +3,22 @@
 namespace App\Http\Controllers;
 
 use App\Models\Matricula;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class MatriculaController extends Controller
 {
+
+    private function getCurso(): int
+    {
+        if (Carbon::now()->month >= 9) {
+            return Carbon::now()->year;
+        } else {
+            return Carbon::now()->year - 1;
+        }
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -18,9 +30,11 @@ class MatriculaController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(): View
     {
-        //
+        return view('matricula.create', [
+            'curso escolar' => '2026/2027',
+        ]);
     }
 
     /**
