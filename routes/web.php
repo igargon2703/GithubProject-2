@@ -38,4 +38,4 @@ Route::delete('profesor/{profesor}', [ProfesorController::class, 'destroy'])->na
 */
 Route::resource('profesor', ProfesorController::class);
 Route::resource('modulo', ModuloController::class);
-Route::resource('modulo', MatriculaController::class);
+Route::resource('matricula', MatriculaController::class);
