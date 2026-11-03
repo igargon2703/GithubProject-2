@@ -30,20 +30,9 @@ class MatriculaController extends Controller
         'modulo_id' => 'required|numeric|exists:modulo.id',
     ];
 
-    private function getCurso(): int
-    {
-        if (Carbon::now()->month >= 9) {
-            return Carbon::now()->year;
-        } else {
-            return Carbon::now()->year - 1;
-        }
-    }
+   
 
-    private function getCursoEscolar(): string
-    {
-        return $this->getCurso() . '/' . ($this->getCurso() + 1);
-    }
-
+    
     /**
      * Display a listing of the resource.
      */

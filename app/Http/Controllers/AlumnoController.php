@@ -133,4 +133,16 @@ class AlumnoController extends Controller
         return redirect()->route('alumno.index');
     }
 
+    public function matricular(Alumno $alumno): View
+    {
+        return view(
+            'alumno.matricular',
+            [
+                'alumno' => $alumno,
+                'modulos' => Modulo::pluck('nombre','id')
+            ]
+        );
+    }
+
 }
+

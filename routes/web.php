@@ -39,3 +39,5 @@ Route::delete('profesor/{profesor}', [ProfesorController::class, 'destroy'])->na
 Route::resource('profesor', ProfesorController::class);
 Route::resource('modulo', ModuloController::class);
 Route::resource('matricula', MatriculaController::class);
+
+Route::get('alumno/{alumno}/matricular', [AlumnoController::class, 'matricular'])->name('alumno.matricular');

@@ -38,8 +38,9 @@
                             <form data-message="{{ $alumno->apellidos . ', ' . $alumno->nombre }}" class="confirm-dialog" action="{{ route('alumno.destroy', $alumno) }}" method="post" style="display: inline;">
                                 @csrf
                                 @method('delete')
-                                <input type="submit" value="Delete" class="btn btn-secondary">
+                                <!<input type="submit" value="Delete" class="btn btn-secondary">
                                 <!--<button type="submit" class="btn btn-secondary">Delete</button>-->
+                                
                             </form>
                         </td>
                     </tr>
