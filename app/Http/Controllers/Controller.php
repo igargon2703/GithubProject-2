@@ -6,16 +6,18 @@ use Carbon\Carbon;
 
 abstract class Controller
 {
-    protected function getCurso(): Int {
+    protected function getCurso(): int
+    {
         //si el mes es 9 o mayor año actual, sino año anterior
-        if(Carbon::now()->month >= 9) {
+        if (Carbon::now()->month >= 9) {
             return Carbon::now()->year;
         } else {
             return Carbon::now()->year - 1;
         }
     }
 
-    protected function getCursoEscolar(): String {
+    protected function getCursoEscolar(): string
+    {
         return $this->getCurso() . '/' . $this->getCurso() + 1;
     }
 }

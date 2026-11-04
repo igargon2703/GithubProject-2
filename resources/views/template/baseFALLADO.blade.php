@@ -13,9 +13,10 @@
     <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     <!-- Google fonts-->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css" />
-    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet" type="text/css" />
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
+        type="text/css" />
     <meta name="theme-color" content="#712cf9">
-    <link href="{{ url('assets/style/styles.css') }}" rel="stylesheet">
+    <link href="{{ url('assets/style/bsmin.css') }}" rel="stylesheet">
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -178,22 +179,22 @@
     </header>
     <main>
         @error('error') <!-- si llega un mensaje de tipo error con nombre error -->
-        <div class="row">
-            <div class="col-md-4 mx-auto">
-                <div class="alert alert-danger" role="alert">
-                    {{ $message }}
+            <div class="row">
+                <div class="col-md-4 mx-auto">
+                    <div class="alert alert-danger" role="alert">
+                        {{ $message }}
+                    </div>
                 </div>
             </div>
-        </div>
         @enderror
         @session('success') <!-- si llega una variable en la sesión de nombre success -->
-        <div class="row">
-            <div class="col-md-4 mx-auto">
-                <div class="alert alert-info" role="alert">
-                    {{ session('success') }}
+            <div class="row">
+                <div class="col-md-4 mx-auto">
+                    <div class="alert alert-info" role="alert">
+                        {{ session('success') }}
+                    </div>
                 </div>
             </div>
-        </div>
         @endsession
         @yield('before-content')
         @yield('content')
