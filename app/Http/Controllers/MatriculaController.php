@@ -67,7 +67,8 @@ class MatriculaController extends Controller
         $matricula->curso = $this->getCurso();
         try {
             $matricula->save();
-            return redirect()->route('matricula.index')->with(['success' => 'Se ha creado la matricula']);
+            //return redirect()->route('matricula.create')->with(['success' => 'Se ha creado la matricula']);
+            return back()->with(['success' => 'Se ha matriculado correctamente']);
         } catch (UniqueConstraintViolationException $e) {
             return back()->withInput()->withErrors([
                 'error' => 'Error al matricula.',

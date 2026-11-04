@@ -7,6 +7,7 @@
                 <h2>Curso escolar: {{$curso_escolar ?? 'sin definir'}}</h2>
                 <form action="{{route('matricula.store')}}" method="post">
                     @csrf
+                    <input type="hidden" name="alumno_id" value="{{ $alumno->id }}">
                     <div class="mb-3">
                         <label for="alumno_id" class="form-label">Alumno que se matricula</label>
                         <select name="alumno_id" id="alumno_id" class="form-select" required>
