@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alumno;
+use App\Models\Modulo;
 use \Exception;
 use Illuminate\Database\UniqueConstraintViolationException;
 use Illuminate\Http\RedirectResponse;
@@ -78,6 +79,15 @@ class AlumnoController extends Controller
         return view('alumno.index', ['alumnos' => $alumnos]);
     }
 
+    public function matricular(Alumno $alumno): View
+    {
+        return view('alumno.matricular', [
+            'alumno' => $alumno,
+            'curso_escolar' => $this->getCursoEscolar(),
+            'modulos' => Modulo::pluck('nombre', 'id'),
+        ]);
+    }
+
     public function show(Alumno $alumno): View
     {
         return view('alumno.show', ['alumno' => $alumno]);
@@ -85,36 +95,26 @@ class AlumnoController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-        // 1º Validar
+        //1º validar
         $validator = Validator::make($request->all(), self::RULES, self::MESSAGES);
         if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
         }
 
-        // 2º Crear el registro con todos los campos
-        $alumno = new Alumno();
-        $alumno->nombre = $request->input('nombre');
-        $alumno->apellidos = $request->input('apellidos');
-        $alumno->fnac = $request->input('fnac');
-        $alumno->genero = $request->input('genero');
-        $alumno->nacceso = $request->input('nacceso');
-
-        // 3º Guardar en la base de datos
+        $alumno = new Alumno($request->all());
         try {
             $alumno->save();
-        } catch (\Illuminate\Database\UniqueConstraintViolationException $e) {
+        } catch (UniqueConstraintViolationException $e) {
             return back()->withInput()->withErrors([
-                'error' => 'La combinación de nombre y apellidos ya existe.',
+                'error' => 'Clave única duplicada.',
+                //'nombre'     => 'Este campo forma parte de la clave única.',
+                //'apellidos'  => 'Este campo también forma parte de la clave única',
             ]);
-        } catch (\Exception $e) {
-            return back()->withInput()->withErrors([
-                'error' => 'Error al crear el alumno: ' . $e->getMessage()
-            ]);
+        } catch (Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Error al crear el alumno.',]);
         }
-
-        return redirect()->route('alumno.index')->with([
-            'success' => 'Se ha creado el alumno correctamente.'
-        ]);
+        //session(['success' => 'Se ha creado el alumno correctamente. V2']);
+        return redirect()->route('alumno.index')->with(['success' => 'Se ha creado el alumno correctamente']);
     }
 
     public function update(Request $request, Alumno $alumno): RedirectResponse
@@ -133,16 +133,4 @@ class AlumnoController extends Controller
         return redirect()->route('alumno.index');
     }
 
-    public function matricular(Alumno $alumno): View
-    {
-        return view(
-            'alumno.matricular',
-            [
-                'alumno' => $alumno,
-                'modulos' => Modulo::pluck('nombre','id')
-            ]
-        );
-    }
-
 }
-

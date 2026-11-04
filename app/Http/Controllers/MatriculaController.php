@@ -2,43 +2,58 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Matricula;
 use App\Models\Alumno;
+use App\Models\Matricula;
 use App\Models\Modulo;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\View\View;
 
 class MatriculaController extends Controller
 {
-    private const Messages = [
-        'alumno_id.required' => 'El alumno es obligatorio',
-        'alumno_id.numeric' => 'El alumno no se ha selecionado bien ',
-        'alumno.exists' => 'El alumno no existe ',
-        'modulo_id.required' => 'El modulo es obligatorio',
-        'modulo_id.numeric' => 'El modulo no se ha selecionado bien',
-        'modulo.exists' => 'El modulo no existe ',
 
-
-
-
+    private const MESSAGES = [
+        'alumno_id.required' => 'El alumno es obligatorio.',
+        'alumno_id.numeric' => 'El alumno no se ha seleccionado bien.',
+        'alumno.exists' => 'El alumno no existe.',
+        'modulo_id.required' => 'El módulo esobligatorio.',
+        'modulo_id.numeric' => 'El módulo no se ha seleccionado bien.',
+        'modulo.exists' => 'El módulo no existe.',
     ];
 
     private const RULES = [
-        'alumno_id' => 'required|numeric|exists:alumno.id',
-        'modulo_id' => 'required|numeric|exists:modulo.id',
+        'alumno_id' => 'required|numeric|exists:alumno,id',
+        'modulo_id' => 'required|numeric|exists:modulo,id',
     ];
 
-   
+    public function index(): View
+    {
+        $matriculas = Matricula::all();
+        //$matriculas = Matricula::orderBy('alfabeticamente')->get();
+        return view('matricula.index', [
+            'matriculas' => $matriculas
+        ]);
+    }
 
-    
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index2()
     {
-        //
+        $lista = [
+            'uno' => 121,
+            121 => 'dos',
+            'tres' => 'cuatro',
+        ];
+        var_dump($lista);
+        echo '<pre>' . var_export($lista, true) . '</pre>';
+        foreach ($lista as $elemento) {
+            echo $elemento . '<br>';
+        }
+        foreach ($lista as $indice => $elemento) {
+            echo $elemento . ' está en la posición ' . $indice . '<br>';
+        }
+        dd($lista);
     }
 
     /**
@@ -47,8 +62,8 @@ class MatriculaController extends Controller
     public function create(): View
     {
         return view('matricula.create', [
-            'alumnos' => Alumno::orderBy('apellido')->orderBy('nombre')->get(),
-            'curso_escolar' => $this->getCursoEscolar(), // Cambia 'curso escolar' por 'curso_escolar'
+            'alumnos' => Alumno::orderBy('apellidos')->orderBy('nombre')->get(),
+            'curso_escolar' => $this->getCursoEscolar(),
             'modulos' => Modulo::pluck('nombre', 'id'),
         ]);
     }
@@ -58,8 +73,7 @@ class MatriculaController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), self::RULES, self::Messages);
-
+        $validator = Validator::make($request->all(), self::RULES, self::MESSAGES);
         if ($validator->fails()) {
             return back()->withInput()->withErrors($validator);
         }
@@ -67,12 +81,10 @@ class MatriculaController extends Controller
         $matricula->curso = $this->getCurso();
         try {
             $matricula->save();
-            //return redirect()->route('matricula.create')->with(['success' => 'Se ha creado la matricula']);
+            //return redirect()->route('matricula.create')->with(['success' => 'Se ha matriculado correctamente']);
             return back()->with(['success' => 'Se ha matriculado correctamente']);
-        } catch (UniqueConstraintViolationException $e) {
-            return back()->withInput()->withErrors([
-                'error' => 'Error al matricula.',
-            ]);
+        } catch (\Exception $e) {
+            return back()->withInput()->withErrors(['error' => 'Error al matricular.']);
         }
     }
 
